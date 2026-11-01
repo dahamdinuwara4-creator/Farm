@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="si"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Betel Farm Helper</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;700&family=Noto+Sans+Tamil:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;--bg:#f4f8f1;--card:#fff;--tx:#1d2b1d;--ac:#2e7d32;--mu:#667;--bd:#d5e0d0;--rd:#c62828;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121a12;--card:#1c261c;--tx:#e8f0e6;--ac:#66bb6a;--mu:#9ab;--bd:#2e3d2e;--rd:#ef5350;color-scheme:dark}}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:radial-gradient(circle at 10% 0,rgba(102,187,106,.3) 0,transparent 45%),var(--bg);color:var(--tx);font:16px/1.55 "Poppins","Noto Sans Sinhala","Noto Sans Tamil",system-ui,sans-serif}
+.w{max-width:560px;margin:auto;padding:12px}
+h1{font-size:20px;margin:4px 0}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px;background:linear-gradient(135deg,#1b5e20,#43a047);color:#fff;padding:14px;border-radius:18px;box-shadow:0 4px 14px rgba(27,94,32,.35)}.top h1{display:flex;align-items:center;gap:8px}
+select,input,button{font:inherit;padding:10px;border-radius:10px;border:1px solid var(--bd);background:var(--card);color:var(--tx);min-width:0}
+input,select{width:100%;margin:4px 0}
+button{background:linear-gradient(135deg,#2e7d32,#66bb6a);color:#fff;border:0;cursor:pointer;font-weight:600;padding:12px;transition:transform .12s}button:active{transform:scale(.96)}
+button.g{background:none;color:var(--rd);padding:4px 8px}
+.tabs{display:flex;gap:6px;margin:10px 0;overflow-x:auto}
+.tabs button{background:var(--card);color:var(--tx);border:1px solid var(--bd);white-space:nowrap;flex:1;border-radius:999px;padding:10px 14px}
+.tabs button.on{background:linear-gradient(135deg,#2e7d32,#66bb6a);color:#fff;border-color:transparent;box-shadow:0 3px 10px rgba(46,125,50,.4)}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px;margin:10px 0;box-shadow:0 2px 8px rgba(0,0,0,.06);animation:up .35s ease}@keyframes up{from{opacity:0;transform:translateY(8px)}}
+.r{display:flex;justify-content:space-between;align-items:center;gap:8px;border-bottom:1px solid var(--bd);padding:6px 0}
+.mu{color:var(--mu);font-size:14px}.in{color:var(--ac)}.ex{color:var(--rd)}
+.big{font-size:30px;font-weight:700}
+.done{text-decoration:line-through;opacity:.6}
+</style></head><body><div class="w" id="app"></div>
+<script>
+var T={
+si:{t:"බුලත් වගා සහායක",h:"මුල්පිටුව",r:"වගා වාර්තා",k:"කාර්ය",m:"මුදල් පෙට්ටිය",add:"එකතු කරන්න",d:"දිනය",n:"සටහන",a:"මුදල (රු.)",inc:"ආදායම",exp:"වියදම",bal:"ශේෂය",act:"ක්‍රියාකාරකම (පොහොර, වතුර, අස්වනු...)",plot:"කොටස / කුඹුර",del:"මකන්න",e:"තවම කිසිවක් නැත",open:"ඉතිරි කාර්ය",rec:"වාර්තා",hv:"බුලත් කඩන දින",rd:"කොපමණ දින කලින් දැනුම් දෙන්නද",hl:"දිනකින් බුලත් කඩන දිනය",ht:"අද බුලත් කඩන දිනයයි!",cy:"සෑම කොපමණ දිනකට වරක් නැවත කඩනවාද (0 = එක් වතාවක් පමණි)",q:"ප්‍රමාණය (කොළ ගණන / කිලෝ)",u:"ඒකක මිල (රු.)",pk:"කඩා ඉවරයි",bk:"උපස්ථය",im:"ආපසු ගන්න (paste කරලා)",sm:"කොටස් අනුව ලාභය",cpd:"Copy කරන්න",al:"සියල්ල"},
+ta:{t:"வெற்றிலை சாகுபடி உதவி",h:"முகப்பு",r:"சாகுபடி பதிவு",k:"பணிகள்",m:"பணப்பெட்டி",add:"சேர்",d:"தேதி",n:"குறிப்பு",a:"தொகை (ரூ.)",inc:"வருமானம்",exp:"செலவு",bal:"இருப்பு",act:"செயல் (உரம், நீர், அறுவடை...)",plot:"பகுதி / தோட்டம்",del:"நீக்கு",e:"பதிவுகள் இல்லை",open:"மீதமுள்ள பணிகள்",rec:"பதிவுகள்",hv:"பறிக்கும் நாட்கள்",rd:"எத்தனை நாட்கள் முன்பு அறிவிக்க",hl:"நாட்களில் வெற்றிலை பறிக்கும் நாள்",ht:"இன்று வெற்றிலை பறிக்கும் நாள்!",cy:"எத்தனை நாட்களுக்கு ஒரு முறை மீண்டும் (0 = ஒரு முறை மட்டும்)",q:"அளவு (இலை / கிலோ)",u:"அலகு விலை (ரூ.)",pk:"பறித்தாயிற்று",bk:"காப்புப்பிரதி",im:"மீட்டெடு (paste செய்து)",sm:"பகுதி வாரியாக லாபம்",cpd:"நகலெடு",al:"அனைத்தும்"},
+en:{t:"Betel Farm Helper",h:"Home",r:"Records",k:"Tasks",m:"Money box",add:"Add",d:"Date",n:"Note",a:"Amount (Rs.)",inc:"Income",exp:"Expense",bal:"Balance",act:"Activity (fertiliser, water, harvest...)",plot:"Plot / field",del:"Delete",e:"Nothing yet",open:"Open tasks",rec:"Records",hv:"Picking days",rd:"Remind how many days before",hl:"days until betel picking",ht:"Betel picking day is today!",cy:"Repeat every how many days (0 = once only)",q:"Quantity (leaves / kg)",u:"Unit price (Rs.)",pk:"Picked",bk:"Backup",im:"Restore (paste, then press)",sm:"Profit by plot",cpd:"Copy",al:"All"}};
+var S={lang:"si",tab:"h",rec:[],task:[],money:[],harv:[]};
+try{var x=localStorage.getItem("bulath");if(x)S=Object.assign(S,JSON.parse(x))}catch(e){}
+function save(){try{localStorage.setItem("bulath",JSON.stringify(S))}catch(e){}}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function v(id){return document.getElementById(id).value}
+var today=function(){var d=new Date();return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2)};
+function days(d){return Math.round((new Date(d+"T00:00:00")-new Date(today()+"T00:00:00"))/864e5)}
+function alerts(){var L=T[S.lang];return S.harv.filter(function(x){var n=days(x.d);return n>=0&&n<=x.r}).map(function(x){var n=days(x.d);return'<div class="c" style="border:2px solid var(--ac)">🌿 <b>'+(n==0?L.ht:n+' '+L.hl)+'</b><div class="mu">'+x.d+(x.p?' · '+esc(x.p):'')+'</div></div>'}).join("")}
+function roll(){var ch=0;S.harv.forEach(function(x){var g=0;while(x.c>0&&days(x.d)<0&&g++<500){var t=new Date(x.d+"T00:00:00");t.setDate(t.getDate()+x.c);x.d=t.getFullYear()+"-"+("0"+(t.getMonth()+1)).slice(-2)+"-"+("0"+t.getDate()).slice(-2);ch=1}});if(ch)save()}
+function addHarv(){if(!v("d4"))return;S.harv.push({d:v("d4"),p:v("p4"),r:parseInt(v("r4"))||2,c:parseInt(v("c4"))||0});S.harv.sort(function(a,b){return a.d<b.d?-1:1});save();draw()}
+function go(t){S.tab=t;save();draw()}
+function lang(l){S.lang=l;save();draw()}
+function addRec(){if(!v("a1"))return;S.rec.unshift({d:v("d1")||today(),p:v("p1"),a:v("a1")});save();draw()}
+function addTask(){if(!v("a2"))return;S.task.push({d:v("d2")||today(),a:v("a2"),x:0});S.task.sort(function(a,b){return a.d<b.d?-1:1});save();draw()}
+function picked(i){var L=T[S.lang],x=S.harv[i],q=parseFloat(v("hq"+i))||0,u=parseFloat(v("hu"+i))||0,tot=Math.round(q*u*100)/100;if(q>0)S.rec.unshift({d:today(),p:x.p,a:L.hv+": "+q});if(tot>0)S.money.unshift({d:today(),n:x.p||"",v:tot,t:"i",q:q,u:u});if(x.c>0){var t=new Date(today()+"T00:00:00");t.setDate(t.getDate()+x.c);x.d=t.getFullYear()+"-"+("0"+(t.getMonth()+1)).slice(-2)+"-"+("0"+t.getDate()).slice(-2)}else S.harv.splice(i,1);save();draw()}
+function plots(){var s={};S.harv.concat(S.rec,S.money).forEach(function(x){if(x.p)s[x.p]=1});return Object.keys(s).map(function(k){return'<option value="'+esc(k)+'">'}).join("")}
+function summary(L){var g={},ms={},mo=S.mo||"",ti=0,to=0;S.money.forEach(function(m){ms[m.d.slice(0,7)]=1;if(mo&&m.d.slice(0,7)!=mo)return;m.t=="i"?ti+=m.v:to+=m.v;var k=m.p||"—";g[k]=g[k]||{i:0,o:0};g[k][m.t]+=m.v});var ks=Object.keys(g);if(!ks.length)return"";return'<div class="c"><b>'+L.sm+'</b><select onchange="S.mo=this.value;save();draw()"><option value="">'+L.al+'</option>'+Object.keys(ms).sort().reverse().map(function(k){return'<option'+(k==mo?" selected":"")+'>'+k+'</option>'}).join("")+'</select><div class="mu">'+L.inc+' '+f(ti)+' · '+L.exp+' '+f(to)+'</div>'+ks.map(function(k){var p=g[k].i-g[k].o;return'<div class="r"><span>'+esc(k)+'</span><span class="'+(p<0?'ex':'in')+'">'+f(p)+'</span></div>'}).join("")+'</div>'}
+function cpy(){var t=document.getElementById("bk");t.select();try{document.execCommand("copy")}catch(e){}}
+function imp(){try{S=Object.assign(S,JSON.parse(v("bi")));save();draw()}catch(e){}}
+function ed(k,i){var x=S[k].splice(i,1)[0],m={rec:{d1:x.d,p1:x.p,a1:x.a},task:{d2:x.d,a2:x.a},money:{d3:x.d,p3:x.p,n3:x.n,a3:x.v,q3:x.q,u3:x.u},harv:{d4:x.d,p4:x.p,r4:x.r,c4:x.c}}[k];save();draw();for(var id in m)document.getElementById(id).value=m[id]||"";window.scrollTo(0,0)}
+function calc(){var q=parseFloat(v("q3")),u=parseFloat(v("u3"));if(q>0&&u>0)document.getElementById("a3").value=Math.round(q*u*100)/100}
+function addMoney(t){var n=parseFloat(v("a3"));if(!n)return;S.money.unshift({d:v("d3")||today(),n:v("n3"),v:n,t:t,p:v("p3"),q:parseFloat(v("q3"))||0,u:parseFloat(v("u3"))||0});save();draw()}
+function rm(k,i){S[k].splice(i,1);save();draw()}
+function tg(i){S.task[i].x=!S.task[i].x;save();draw()}
+function totals(){var i=0,o=0;S.money.forEach(function(m){m.t=="i"?i+=m.v:o+=m.v});return{i:i,o:o,b:i-o}}
+function f(n){return n.toLocaleString("en-US")}
+function draw(){roll();
+var L=T[S.lang],h='<div class="top"><h1>'+LEAF+' '+L.t+'</h1><select style="width:auto" onchange="lang(this.value)">'+
+["si:සිංහල","ta:தமிழ்","en:English"].map(function(o){var p=o.split(":");return'<option value="'+p[0]+'"'+(S.lang==p[0]?" selected":"")+'>'+p[1]+'</option>'}).join("")+'</select></div>';
+h+='<div class="tabs">'+[["h","🏠 "+L.h],["b","🌿 "+L.hv],["r","📒 "+L.r],["k","✅ "+L.k],["m","💰 "+L.m],["x","💾 "+L.bk]].map(function(t){return'<button class="'+(S.tab==t[0]?"on":"")+'" onclick="go(\''+t[0]+'\')">'+t[1]+'</button>'}).join("")+'</div>';
+var tt=totals();h+='<datalist id="pl">'+plots()+'</datalist>';
+if(S.tab=="h"){h+=alerts();h+='<div class="c"><div class="mu">'+L.bal+'</div><div class="big '+(tt.b<0?"ex":"in")+'">Rs. '+f(tt.b)+'</div><div class="mu">'+L.inc+': '+f(tt.i)+' · '+L.exp+': '+f(tt.o)+'</div></div>'+
+'<div class="c"><div class="mu">'+L.open+'</div><div class="big">'+S.task.filter(function(t){return!t.x}).length+'</div></div>'+
+'<div class="c"><div class="mu">'+L.rec+'</div><div class="big">'+S.rec.length+'</div></div>'}
+if(S.tab=="b"){h+='<div class="c"><input type="date" id="d4" value="'+today()+'"><input id="p4" list="pl" placeholder="'+L.plot+'"><div class="mu">'+L.rd+'</div><input id="r4" type="number" inputmode="numeric" value="2"><div class="mu">'+L.cy+'</div><input id="c4" type="number" inputmode="numeric" placeholder="0"><button onclick="addHarv()">'+L.add+'</button></div>';
+h+=alerts();
+h+=S.harv.length?S.harv.map(function(x,i){var n=days(x.d);return'<div class="c" style="'+(n<0?'opacity:.5':'')+'"><div class="r"><div><b>'+x.d+'</b><div class="mu">'+(x.p?esc(x.p)+' · ':'')+(n>=0?n+' '+L.hl:'')+'</div></div><span style="white-space:nowrap"><button class="g" onclick="ed(\'harv\','+i+')">✎</button><button class="g" onclick="rm(\'harv\','+i+')">✕</button></span></div><div style="display:flex;gap:6px"><input id="hq'+i+'" type="number" inputmode="decimal" placeholder="'+L.q+'"><input id="hu'+i+'" type="number" inputmode="decimal" placeholder="'+L.u+'"><button onclick="picked('+i+')">'+L.pk+'</button></div></div>'}).join(""):'<p class="mu">'+L.e+'</p>'}
+if(S.tab=="x"){h+='<div class="c"><textarea id="bk" rows="8" style="width:100%;box-sizing:border-box" readonly>'+esc(JSON.stringify(S))+'</textarea><button onclick="cpy()">'+L.cpd+'</button></div><div class="c"><textarea id="bi" rows="4" style="width:100%;box-sizing:border-box"></textarea><button onclick="imp()">'+L.im+'</button></div>'}
+if(S.tab=="r"){h+='<div class="c"><input type="date" id="d1" value="'+today()+'"><input id="p1" list="pl" placeholder="'+L.plot+'"><input id="a1" placeholder="'+L.act+'"><button onclick="addRec()">'+L.add+'</button></div>';
+h+=S.rec.length?S.rec.map(function(r,i){return'<div class="c r"><div><b>'+esc(r.a)+'</b><div class="mu">'+r.d+(r.p?' · '+esc(r.p):'')+'</div></div><span style="white-space:nowrap"><button class="g" onclick="ed(\'rec\','+i+')">✎</button><button class="g" onclick="rm(\'rec\','+i+')">✕</button></span></div>'}).join(""):'<p class="mu">'+L.e+'</p>'}
+if(S.tab=="k"){h+='<div class="c"><input type="date" id="d2" value="'+today()+'"><input id="a2" placeholder="'+L.act+'"><button onclick="addTask()">'+L.add+'</button></div>';
+h+=S.task.length?S.task.map(function(t,i){return'<div class="c r"><label class="'+(t.x?"done":"")+'"><input type="checkbox" style="width:auto" '+(t.x?"checked":"")+' onchange="tg('+i+')"> '+esc(t.a)+'<div class="mu">'+t.d+'</div></label><span style="white-space:nowrap"><button class="g" onclick="ed(\'task\','+i+')">✎</button><button class="g" onclick="rm(\'task\','+i+')">✕</button></span></div>'}).join(""):'<p class="mu">'+L.e+'</p>'}
+if(S.tab=="m"){h+='<div class="c"><div class="mu">'+L.bal+'</div><div class="big '+(tt.b<0?"ex":"in")+'">Rs. '+f(tt.b)+'</div></div><div class="c"><input type="date" id="d3" value="'+today()+'"><input id="p3" list="pl" placeholder="'+L.plot+'"><input id="n3" placeholder="'+L.n+'"><input id="q3" type="number" inputmode="decimal" placeholder="'+L.q+'" oninput="calc()"><input id="u3" type="number" inputmode="decimal" placeholder="'+L.u+'" oninput="calc()"><input id="a3" type="number" inputmode="decimal" placeholder="'+L.a+'"><div style="display:flex;gap:8px"><button style="flex:1" onclick="addMoney(\'i\')">+ '+L.inc+'</button><button style="flex:1;background:var(--rd)" onclick="addMoney(\'o\')">− '+L.exp+'</button></div></div>';
+h+=summary(L);h+=S.money.length?S.money.map(function(m,i){return'<div class="c r"><div><b class="'+(m.t=="i"?"in":"ex")+'">'+(m.t=="i"?"+":"−")+' '+f(m.v)+'</b><div class="mu">'+m.d+(m.q&&m.u?' · '+f(m.q)+' × '+f(m.u):'')+(m.p?' · '+esc(m.p):'')+(m.n?' · '+esc(m.n):'')+'</div></div><span style="white-space:nowrap"><button class="g" onclick="ed(\'money\','+i+')">✎</button><button class="g" onclick="rm(\'money\','+i+')">✕</button></span></div>'}).join(""):'<p class="mu">'+L.e+'</p>'}
+document.getElementById("app").innerHTML=h}
+var LD="M12 22C4 17 1 10 5 6C8 3 11 5 12 8C13 5 16 3 19 6C23 10 20 17 12 22Z",LEAF='<svg width="34" height="34" viewBox="0 0 24 24"><path d="'+LD+'" fill="#c5e1a5"/><path d="M12 22V10M12 17l-4-4M12 14l4-3.5" stroke="#2e7d32" stroke-width=".9" fill="none" stroke-linecap="round"/></svg>';
+try{var cv=document.createElement("canvas");cv.width=cv.height=180;var cx=cv.getContext("2d");cx.fillStyle="#2e7d32";cx.fillRect(0,0,180,180);cx.translate(90,92);cx.scale(6.4,6.4);cx.translate(-12,-12.5);cx.fillStyle="#c5e1a5";cx.fill(new Path2D(LD));cx.strokeStyle="#2e7d32";cx.lineWidth=.9;cx.lineCap="round";cx.stroke(new Path2D("M12 22V10M12 17l-4-4M12 14l4-3.5"));var u=cv.toDataURL("image/png");["apple-touch-icon","icon"].forEach(function(r){var l=document.createElement("link");l.rel=r;l.href=u;document.head.appendChild(l)})}catch(e){}
+draw();
+</script></body></html>
